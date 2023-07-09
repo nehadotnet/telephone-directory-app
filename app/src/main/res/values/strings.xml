@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">task_login_signup_screen</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="forget_your_password">Forget your password?</string>
+    <string name="donot_have_an_account">Don\'t have an account ?</string>
+    <string name="sign_up">Sign up!</string>
+    <string name="email">Email</string>
+    <string name="signup">Signup</string>
+    <string name="required">Required</string>
+    <string name="required_username">Required username</string>
+    <string name="required_password">Required password</string>
+    <string name="password_can_not_exceed_8_characters">Password can not exceed 8 characters</string>
+    <string name="password_set_successfully">Password Set Successfully</string>
+    <string name="password_do_not_match">Password do not match</string>
+    <string name="enter_confirm_password">Enter confirm password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_email_id">Enter email id</string>
+    <string name="enter_valid_email_id">Enter valid email id</string>
+    <string name="enter_password">Enter password</string>
+    <string name="chatzulu">chatzulu</string>
+    <string name="tvsignup">Signup</string>
+
+</resources>
