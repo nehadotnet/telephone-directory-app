@@ -23,7 +23,7 @@ public class DashboardActivity extends AppCompatActivity {
         String name=getIntent().getStringExtra("name");
         String email=getIntent().getStringExtra("email");
 
-        userDetail.setText("UserName: "+name+"Email: "+email);
+        userDetail.setText("UserName: "+name+"\n\nEmail: "+email);
 
 
 
