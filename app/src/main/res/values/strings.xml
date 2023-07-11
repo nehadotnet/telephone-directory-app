@@ -22,5 +22,7 @@
     <string name="enter_password">Enter password</string>
     <string name="chatzulu">chatzulu</string>
     <string name="tvsignup">Signup</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
 
 </resources>

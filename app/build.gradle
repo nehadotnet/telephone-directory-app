@@ -6,14 +6,18 @@ android {
     namespace 'com.example.task_login_signup_screen'
     compileSdk 33
 
+
     defaultConfig {
         applicationId 'com.task_login_signup_screen'
         minSdk 28
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures{
+        buildConfig=true
     }
 
     buildTypes {
@@ -38,4 +42,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //https://github.com/airbnb/lottie-android
+    implementation 'com.airbnb.android:lottie:6.0.1'
 }

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.LoginActivity">
 
@@ -20,18 +20,17 @@
         android:id="@+id/tv_app_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/chatzulu"
+        android:layout_marginTop="16dp"
         android:gravity="center"
+        android:text="@string/chatzulu"
         android:textColor="@color/logoname"
         android:textSize="34sp"
-        android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        />
+        android:textStyle="bold" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_input_username"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
         android:layout_marginTop="32dp"
         android:hint="@string/username"
         android:inputType="text"
@@ -48,30 +47,28 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_input_password"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:hint="@string/password"
         app:endIconMode="password_toggle"
-        app:errorEnabled="true"
-        android:layout_marginTop="8dp"
         app:startIconDrawable="@drawable/baseline_lock">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txt_edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            />
+            android:inputType="textPassword" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
+
     <TextView
         android:id="@+id/tv_forget_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="@string/forget_your_password"
         android:layout_gravity="right"
-        />
+        android:layout_marginTop="8dp"
+        android:hint="@string/forget_your_password" />
 
 
     <androidx.appcompat.widget.AppCompatButton
@@ -83,15 +80,13 @@
         tools:ignore="MissingConstraints" />
 
 
-
     <TextView
         android:id="@+id/tv_have_account"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
-        android:text="@string/donot_have_an_account"
-     />
+        android:text="@string/donot_have_an_account" />
 
     <TextView
         android:id="@+id/tv_sign_up"
@@ -99,7 +94,6 @@
         android:layout_height="wrap_content"
         android:text="@string/sign_up"
         android:textColor="#2196F3"
-        android:textStyle="bold"
-        />
+        android:textStyle="bold" />
 
 </LinearLayout>

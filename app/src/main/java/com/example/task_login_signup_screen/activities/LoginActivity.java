@@ -105,6 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("name", signInResponse.getData().getName());
         intent.putExtra("email", signInResponse.getData().getEmail());
         startActivity(intent);
+
     }
 
 
