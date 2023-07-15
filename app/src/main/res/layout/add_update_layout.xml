@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@color/dark_blue"
+    android:paddingLeft="21dp"
+    android:paddingRight="21dp"
+    android:paddingBottom="11dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/add_name"
+        android:textSize="24sp"
+        android:paddingTop="8dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:paddingLeft="8dp"
+        android:hint="@string/add_name"
+        android:background="@color/white"
+        android:id="@+id/ed_name"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:hint="@string/enter_number"
+        android:paddingLeft="8dp"
+        android:background="@color/white"
+        android:id="@+id/ed_number"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_add"
+        android:text="@string/add"
+        android:textSize="16sp"
+        android:textColor="@color/dark_blue"
+        android:background="@color/white"
+        android:layout_gravity="end"
+        android:layout_marginTop="5dp"/>
+
+</LinearLayout>

@@ -19,7 +19,7 @@
             android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name=".activities.StartActivity"
             android:exported="false"
             android:theme="@style/DashboardActionBar"/>
         <activity
@@ -29,7 +29,7 @@
             android:name=".activities.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.StartActivity"
+            android:name=".activities.DashboardActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

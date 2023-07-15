@@ -4,7 +4,8 @@
 
     <style name="Theme.task_login_signup_screen" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/dark_blue</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textSize">18sp</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
