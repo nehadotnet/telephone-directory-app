@@ -33,7 +33,7 @@
                 android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:text="@string/chatzulu"
-                android:textColor="@color/logoname"
+                android:textColor="@color/logo_name"
                 android:textSize="34sp"
                 android:textStyle="bold" />
 

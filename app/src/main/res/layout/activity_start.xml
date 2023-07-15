@@ -14,15 +14,16 @@
         android:layout_height="480dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/startscreen" />
+        app:lottie_rawRes="@raw/start_screen" />
 
     <TextView
         android:id="@+id/tv_version"
+        android:layout_marginVertical="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textColor="@color/light_blue"
-        android:textSize="24sp"
+        android:textColor="@color/light_grey"
+        android:textSize="14sp"
         android:textStyle="bold" />
 
 

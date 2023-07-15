@@ -4,11 +4,12 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F44336</color>
     <color name="light_blue">#3a6eff</color>
+    <color name="light_grey">#A2A3A8</color>
     <color name="dark_blue">#5e4fee</color>
-    <color name="endColor">#822efe</color>
+    <color name="end_color">#822efe</color>
     <color name="reset_password">#6115B3</color>
     <color name="background">#FFFFFFFF</color>
     <color name="text">#FF000000</color>
-    <color name="logoname">#743AB7</color>
+    <color name="logo_name">#743AB7</color>
     <color name="open_dialog">#009688</color>
 </resources>

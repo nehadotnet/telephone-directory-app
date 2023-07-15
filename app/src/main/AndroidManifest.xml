@@ -9,7 +9,7 @@
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
-        android:label="task_login_signup_screen"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.task_login_signup_screen"
@@ -19,9 +19,8 @@
             android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.StartActivity"
-            android:exported="false"
-            android:theme="@style/DashboardActionBar"/>
+            android:name=".activities.DashboardActivity"
+            android:exported="false"/>
         <activity
             android:name=".activities.CreateNewPasswordActivity"
             android:exported="false" />
@@ -29,7 +28,7 @@
             android:name=".activities.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name=".activities.StartActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
