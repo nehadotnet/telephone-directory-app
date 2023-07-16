@@ -1,4 +1,4 @@
-package com.example.task_login_signup_screen;
+package com.example.task_login_signup_screen.network;
 
 import com.example.task_login_signup_screen.network.requests.SignInRequest;
 import com.example.task_login_signup_screen.network.requests.SignUpRequest;

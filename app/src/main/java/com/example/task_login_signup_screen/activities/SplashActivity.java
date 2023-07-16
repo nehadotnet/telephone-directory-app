@@ -44,9 +44,11 @@ public class SplashActivity extends AppCompatActivity {
                     nextScreen.putExtra(PREF_EMAIL, email);
                     nextScreen.putExtra(PREF_NAME, name);
                     startActivity(nextScreen);
+                    finishAffinity();
                 } else {
                     nextScreen = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(nextScreen);
+                    finishAffinity();
                 }
             }
         }, Constants.HANDLER_DELAY);

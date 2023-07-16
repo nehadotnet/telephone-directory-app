@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void saveLoginState(SignInResponse signInResponse) {
-        if (signInResponse != null) {
+        if (signInResponse != null && signInResponse.getData() != null) {
             SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(Constants.PREF_TOKEN, signInResponse.getData().getToken());

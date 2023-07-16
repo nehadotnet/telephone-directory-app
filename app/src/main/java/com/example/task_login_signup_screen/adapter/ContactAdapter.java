@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.task_login_signup_screen.Model.ContactModel;
+import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.listeners.OnItemClickListener;
 
@@ -31,6 +31,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         this.onItemClickListener = onItemClickListener;
     }
 
+    public void refreshAdapter(ArrayList<ContactModel> contactModels){
+        this.dataSet=contactModels;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,9 +46,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-        holder.ivContact.setImageResource(dataSet.get(position).image);
-        holder.tvName.setText(dataSet.get(position).name);
-        holder.tvNumber.setText(dataSet.get(position).number);
+        holder.tvName.setText(dataSet.get(position).getFullName());
+        holder.tvNumber.setText(dataSet.get(position).getPhone());
 
         holder.llRow.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition(), 30));
 

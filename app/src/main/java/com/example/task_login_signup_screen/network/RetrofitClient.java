@@ -4,8 +4,6 @@ import static com.example.task_login_signup_screen.utils.Constants.BASE_URL;
 
 import android.util.Log;
 
-import com.example.task_login_signup_screen.AuthService;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 

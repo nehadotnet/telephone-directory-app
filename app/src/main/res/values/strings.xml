@@ -37,5 +37,18 @@
     <string name="dialog_yes">Yes</string>
     <string name="dialog_no">No</string>
     <string name="updated_successfully">Updated Successfully</string>
+    <string name="full_name">Full Name</string>
+    <string name="contact_form_title">Add New Contact Form</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="nick_name">Nick Name</string>
+    <string name="address">Address</string>
+    <string name="work_info">Work Info</string>
+    <string name="relationship">Relationship</string>
+    <string name="website">Website</string>
+    <string name="reset">Reset</string>
+    <string name="full_name_required">FullName Required!</string>
+    <string name="invalid_phone">Invalid Phone Number</string>
+    <string name="phone_required">Required Phone Number</string>
+    <string name="something_went_wrong">Something Went Wrong</string>
 
 </resources>
