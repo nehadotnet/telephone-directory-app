@@ -1,19 +1,16 @@
 package com.example.task_login_signup_screen.activities;
 
-import static com.example.task_login_signup_screen.utils.Utils.HANDLER_DELAY;
+import static com.example.task_login_signup_screen.utils.Constants.HANDLER_DELAY;
 import static com.example.task_login_signup_screen.utils.Utils.navigateScreen;
 import static com.example.task_login_signup_screen.utils.Utils.showToastMessage;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.task_login_signup_screen.R;
 import com.google.android.material.textfield.TextInputEditText;
@@ -87,10 +84,6 @@ public class CreateNewPasswordActivity extends AppCompatActivity {
             txtInputEditConfirmPassword.requestFocus();
             return false;
         }
-
         return true;
-
     }
-
-
 }

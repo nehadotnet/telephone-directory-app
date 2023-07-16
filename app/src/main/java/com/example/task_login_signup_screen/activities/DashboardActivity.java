@@ -21,6 +21,7 @@ import com.example.task_login_signup_screen.Model.ContactModel;
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.adapter.ContactAdapter;
 import com.example.task_login_signup_screen.listeners.OnItemClickListener;
+import com.example.task_login_signup_screen.utils.Constants;
 import com.example.task_login_signup_screen.utils.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -55,8 +56,8 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     private void setUI() {
         setSupportActionBar(toolbar);
 
-        String name = getIntent().getStringExtra("name");
-        String email = getIntent().getStringExtra("email");
+        String name = getIntent().getStringExtra(Constants.PREF_NAME);
+        String email = getIntent().getStringExtra(Constants.PREF_EMAIL);
         userDetail.setText("UserName: " + name + "\n\nEmail: " + email);
 
         rvContacts.setLayoutManager(new LinearLayoutManager(this));

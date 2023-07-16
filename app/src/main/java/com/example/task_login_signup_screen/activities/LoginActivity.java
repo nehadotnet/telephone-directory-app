@@ -5,22 +5,21 @@ import static com.example.task_login_signup_screen.utils.Utils.navigateScreen;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.network.RetrofitClient;
 import com.example.task_login_signup_screen.network.requests.SignInRequest;
-import com.example.task_login_signup_screen.network.requests.SignUpRequest;
-import com.example.task_login_signup_screen.network.responses.RegisterResponse;
 import com.example.task_login_signup_screen.network.responses.SignInResponse;
+import com.example.task_login_signup_screen.utils.Constants;
 import com.example.task_login_signup_screen.utils.Utils;
 import com.google.android.material.textfield.TextInputEditText;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,8 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText txtInputEditUsername, txtInputEditPassword;
     AppCompatButton btnLogin;
 
-    String email;
-    String password;
+    private String email, password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,19 +55,14 @@ public class LoginActivity extends AppCompatActivity {
 
         tvForgetPassword.setOnClickListener(v -> navigateScreen(this, CreateNewPasswordActivity.class));
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkValidation()) {
-                    loginUser();
-                }
+        btnLogin.setOnClickListener(v -> {
+            if (checkValidation()) {
+                loginUser();
             }
         });
     }
 
     private void loginUser() {
-
-
         // creating request using json class.
         SignInRequest request = new SignInRequest(email, password);
 
@@ -84,11 +77,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
                     SignInResponse signInResponse = response.body();
+
+                    saveLoginState(signInResponse);
                     switchScreen(signInResponse);
-                    Toast.makeText(LoginActivity.this, signInResponse.getData().getName(), Toast.LENGTH_LONG).show();
-                    //navigateScreen(LoginActivity.this, DashboardActivity.class);
+
                 } else if (response.errorBody() != null) {
-                    Log.e("TAG", "onResponse() returned: " + response.errorBody().toString());
+                    try {
+                        Log.e("TAG", "onResponse() returned: " + response.errorBody().string());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
 
@@ -100,10 +98,21 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void saveLoginState(SignInResponse signInResponse) {
+        if (signInResponse != null) {
+            SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(Constants.PREF_TOKEN, signInResponse.getData().getToken());
+            editor.putString(Constants.PREF_EMAIL, signInResponse.getData().getEmail());
+            editor.putString(Constants.PREF_NAME, signInResponse.getData().getName());
+            editor.apply();
+        }
+    }
+
     private void switchScreen(SignInResponse signInResponse) {
         Intent intent = new Intent(this, DashboardActivity.class);
-        intent.putExtra("name", signInResponse.getData().getName());
-        intent.putExtra("email", signInResponse.getData().getEmail());
+        intent.putExtra(Constants.PREF_NAME, signInResponse.getData().getName());
+        intent.putExtra(Constants.PREF_EMAIL, signInResponse.getData().getEmail());
         startActivity(intent);
         finishAffinity();
     }

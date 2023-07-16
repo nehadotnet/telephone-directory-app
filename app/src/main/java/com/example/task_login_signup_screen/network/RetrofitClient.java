@@ -1,6 +1,6 @@
 package com.example.task_login_signup_screen.network;
 
-import static com.example.task_login_signup_screen.utils.Utils.BASE_URL;
+import static com.example.task_login_signup_screen.utils.Constants.BASE_URL;
 
 import android.util.Log;
 

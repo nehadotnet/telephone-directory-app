@@ -10,9 +10,6 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public final static String BASE_URL = "http://restapi.adequateshop.com/";
-    public static final int HANDLER_DELAY = 1500;
-    public static final String TEL = "tel: +91";
 
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
@@ -20,19 +17,19 @@ public class Utils {
         return pattern.matcher(email).matches();
     }
 
-    public static void navigateScreen(Context context,  Class<? extends Activity> activityClass) {
+    public static void navigateScreen(Context context, Class<? extends Activity> activityClass) {
         Intent intent = new Intent(context, activityClass);
         context.startActivity(intent);
     }
 
-    public static void showToastMessage(Context context,String message){
+    public static void showToastMessage(Context context, String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
     public static void dialContact(Context context, String phoneNumber) {
         Intent iDial = new Intent();
         iDial.setAction(Intent.ACTION_DIAL);
-        iDial.setData(Uri.parse(Utils.TEL + phoneNumber));
+        iDial.setData(Uri.parse(Constants.TEL + phoneNumber));
         context.startActivity(iDial);
     }
 }
