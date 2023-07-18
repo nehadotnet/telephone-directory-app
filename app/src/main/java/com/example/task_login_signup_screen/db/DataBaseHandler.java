@@ -10,10 +10,23 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.example.task_login_signup_screen.models.ContactModel;
+import com.example.task_login_signup_screen.network.responses.Data;
 
 import java.util.ArrayList;
 
 public class DataBaseHandler extends SQLiteOpenHelper {
+
+    static DataBaseHandler dataBaseHandler;
+
+    public static DataBaseHandler getInstance(Context context) {
+        if (dataBaseHandler == null) {
+            dataBaseHandler = new DataBaseHandler(context);
+        } else {
+            return dataBaseHandler;
+        }
+        return dataBaseHandler;
+    }
+
 
     public DataBaseHandler(@Nullable Context context) {
         super(context, DBConstants.DB_NAME, null, DBConstants.DB_VERSION);
@@ -58,11 +71,26 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 ContactModel contactModel = new ContactModel();
+                contactModel.setId(cursor.getInt(0));
                 contactModel.setFullName(cursor.getString(1));
                 contactModel.setPhone(cursor.getString(2));
+                contactModel.setEmail(cursor.getString(3));
+                contactModel.setNickName(cursor.getString(4));
+                contactModel.setAddress(cursor.getString(5));
+                contactModel.setWorkInfo(cursor.getString(6));
+                contactModel.setRelationship(cursor.getString(7));
+                contactModel.setWebsite(cursor.getString(8));
                 contactList.add(contactModel);
             } while (cursor.moveToNext());
         }
         return contactList;
     }
+
+    public boolean deleteContact(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int delete = db.delete(DBConstants.TABLE_CONTACT, DBConstants.COL_ID + "=? ", new String[]{String.valueOf(id)});
+        db.close();
+        return delete > 0;
+    }
+
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -37,7 +38,6 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
 
     ArrayList<ContactModel> arrayContact = new ArrayList<>();
     ContactAdapter adapter;
-    DataBaseHandler dataBaseHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +63,8 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         String name = sharedPreferences.getString(Constants.PREF_EMAIL, "");
         userDetail.setText("UserName: " + name + "\n\nEmail: " + email);
 
-        dataBaseHandler = new DataBaseHandler(DashboardActivity.this);
-        arrayContact = dataBaseHandler.getAllContact();
+        arrayContact.clear();
+        arrayContact = DataBaseHandler.getInstance(this).getAllContact();
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ContactAdapter(this, arrayContact, this);
         rvContacts.setAdapter(adapter);
@@ -73,47 +73,16 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
             @Override
             public void onClick(View v) {
                 Utils.navigateScreen(DashboardActivity.this, ContactFormActivity.class);
-
-//                Dialog dialog = new Dialog(DashboardActivity.this);
-//                dialog.setContentView(R.layout.add_update_layout);
-//
-//                EditText edName = dialog.findViewById(R.id.ed_name);
-//                EditText edNumber = dialog.findViewById(R.id.ed_number);
-//                AppCompatButton btnAction = dialog.findViewById(R.id.btn_add);
-//
-//                btnAction.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-
-
-//                        String name = "", number = "";
-//                        if (!edName.getText().toString().equals("")) {
-//                            name = edName.getText().toString();
-//                        }
-//                        if (!edName.getText().toString().equals("")) {
-//                            number = edNumber.getText().toString();
-//                        } else {
-//                            Utils.showToastMessage(DashboardActivity.this, getString(R.string.all_fields_required));
-//                        }
-//
-//                        ContactModel contactModel = new ContactModel(name, number, "", "", "", "", "", "");
-//
-//                        dataBaseHandler.addNewContact(contactModel);
-//                        dialog.dismiss();
-//                        refreshAdapter();
-//                    }
-//                });
-//                dialog.show();
+                refreshAdapter();
             }
         });
     }
 
     private void refreshAdapter() {
-        arrayContact = dataBaseHandler.getAllContact();
+        arrayContact = DataBaseHandler.getInstance(this).getAllContact();
         adapter.refreshAdapter(arrayContact);
         rvContacts.scrollToPosition(arrayContact.size() - 1);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -124,7 +93,6 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-
         if (itemId == R.id.opt_logout) {
             Utils.showToastMessage(DashboardActivity.this, "logout");
         } else if (itemId == R.id.opt_settings) {
@@ -143,9 +111,18 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                     .setTitle(getString(R.string.delete_contact))
                     .setMessage(getString(R.string.are_you_sure_want_to_delete))
                     .setPositiveButton(getString(R.string.dialog_yes), (dialog, which) -> {
+                        // arrayContact.remove(position);
 
-                        arrayContact.remove(position);
-                        adapter.notifyItemRemoved(position);
+                        Log.e("TAG", "onItemClick: "+ arrayContact.get(position).toString() );
+                        boolean result = DataBaseHandler.getInstance(DashboardActivity.this).deleteContact(arrayContact.get(position).getId());
+                        if (result) {
+                            Utils.showToastMessage(DashboardActivity.this, getString(R.string.contact_deleted_successfully));
+                            arrayContact.clear();
+                            arrayContact = DataBaseHandler.getInstance(this).getAllContact();
+                            Log.e("TAG", "onItemClick: " + arrayContact.size() );
+                           adapter.refreshAdapter(arrayContact);
+                        }
+                        adapter.notifyDataSetChanged();
                     })
                     .setNegativeButton(getString(R.string.dialog_no), (dialog, which) -> {
 
@@ -179,7 +156,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                         Utils.showToastMessage(DashboardActivity.this, getString(R.string.all_fields_required));
                     }
 
-                    arrayContact.set(position, new ContactModel(name, number, "", "", "", "", "", ""));
+                    arrayContact.set(position, new ContactModel(0, name, number, "", "", "", "", "", ""));
                     adapter.notifyItemChanged(position);
 
                     dialog.dismiss();

@@ -1,12 +1,21 @@
 package com.example.task_login_signup_screen.models;
 
 public class ContactModel {
+    private int Id;
     private String fullName, phone, email, nickName, address, workInfo, relationship, website;
 
     public ContactModel() {
     }
+    public int getId() {
+        return Id;
+    }
 
-    public ContactModel(String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website) {
+    public void setId(int Id) {
+        this.Id = Id;
+    }
+
+    public ContactModel(int Id, String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website) {
+        this.Id = Id;
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
@@ -20,7 +29,8 @@ public class ContactModel {
     @Override
     public String toString() {
         return "ContactModel{" +
-                "fullName='" + fullName + '\'' +
+                "Id=" + Id +
+                ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", nickName='" + nickName + '\'' +

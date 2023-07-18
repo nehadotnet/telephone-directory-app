@@ -50,5 +50,6 @@
     <string name="invalid_phone">Invalid Phone Number</string>
     <string name="phone_required">Required Phone Number</string>
     <string name="something_went_wrong">Something Went Wrong</string>
+    <string name="contact_deleted_successfully">Contact Deleted Successfully</string>
 
 </resources>

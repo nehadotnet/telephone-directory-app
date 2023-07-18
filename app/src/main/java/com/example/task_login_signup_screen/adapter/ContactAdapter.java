@@ -2,6 +2,7 @@ package com.example.task_login_signup_screen.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
         holder.llRow.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition(), 30));
 
-        holder.btnDelete.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition(), 20));
+        holder.btnDelete.setOnClickListener(v -> {
+            Log.e("TAG", "onBindViewHolder: " + holder.getAdapterPosition() );
+            Log.e("TAG", "onBindViewHolder: " + dataSet.get(holder.getAdapterPosition()).toString() );
+            onItemClickListener.onItemClick(holder.getAdapterPosition(), 20);
+        });
 
         holder.btnCall.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition(), 10));
     }
