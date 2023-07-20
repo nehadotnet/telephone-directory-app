@@ -2,6 +2,7 @@ package com.example.task_login_signup_screen.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -129,41 +130,47 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                     });
             builder.show();
         } else if (type == 30) {
-            Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.add_update_layout);
 
-            EditText edName = dialog.findViewById(R.id.ed_name);
-            EditText edNumber = dialog.findViewById(R.id.ed_number);
-            AppCompatButton btnAction = dialog.findViewById(R.id.btn_add);
-            TextView tvTitle = dialog.findViewById(R.id.tv_title);
+            Intent intent=new Intent(DashboardActivity.this,ContactFormActivity.class);
+            intent.putExtra("contact",arrayContact.get(position));
+            startActivity(intent);
 
-            btnAction.setText("Update");
-            tvTitle.setText("Update Contact");
 
-            edName.setText((arrayContact.get(position)).getFullName());
-            edNumber.setText((arrayContact.get(position)).getPhone());
-
-            btnAction.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String name = "", number = "";
-                    if (!edName.getText().toString().equals("")) {
-                        name = edName.getText().toString();
-                    }
-                    if (!edName.getText().toString().equals("")) {
-                        number = edNumber.getText().toString();
-                    } else {
-                        Utils.showToastMessage(DashboardActivity.this, getString(R.string.all_fields_required));
-                    }
-
-                    arrayContact.set(position, new ContactModel(0, name, number, "", "", "", "", "", ""));
-                    adapter.notifyItemChanged(position);
-
-                    dialog.dismiss();
-                    Utils.showToastMessage(DashboardActivity.this, getString(R.string.updated_successfully));
-                }
-            });
-            dialog.show();
+//            Dialog dialog = new Dialog(this);
+//            dialog.setContentView(R.layout.add_update_layout);
+//
+//            EditText edName = dialog.findViewById(R.id.ed_name);
+//            EditText edNumber = dialog.findViewById(R.id.ed_number);
+//            AppCompatButton btnAction = dialog.findViewById(R.id.btn_add);
+//            TextView tvTitle = dialog.findViewById(R.id.tv_title);
+//
+//            btnAction.setText("Update");
+//            tvTitle.setText("Update Contact");
+//
+//            edName.setText((arrayContact.get(position)).getFullName());
+//            edNumber.setText((arrayContact.get(position)).getPhone());
+//
+//            btnAction.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    String name = "", number = "";
+//                    if (!edName.getText().toString().equals("")) {
+//                        name = edName.getText().toString();
+//                    }
+//                    if (!edName.getText().toString().equals("")) {
+//                        number = edNumber.getText().toString();
+//                    } else {
+//                        Utils.showToastMessage(DashboardActivity.this, getString(R.string.all_fields_required));
+//                    }
+//
+//                    arrayContact.set(position, new ContactModel(0, name, number, "", "", "", "", "", ""));
+//                    adapter.notifyItemChanged(position);
+//
+//                    dialog.dismiss();
+//                    Utils.showToastMessage(DashboardActivity.this, getString(R.string.updated_successfully));
+//                }
+//            });
+//            dialog.show();
         }
     }
 }

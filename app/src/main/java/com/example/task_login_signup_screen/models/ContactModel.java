@@ -1,6 +1,8 @@
 package com.example.task_login_signup_screen.models;
 
-public class ContactModel {
+import java.io.Serializable;
+
+public class ContactModel implements Serializable {
     private int Id;
     private String fullName, phone, email, nickName, address, workInfo, relationship, website;
 

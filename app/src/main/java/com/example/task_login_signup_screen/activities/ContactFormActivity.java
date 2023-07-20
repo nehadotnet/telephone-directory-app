@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.db.DataBaseHandler;
@@ -18,7 +20,7 @@ public class ContactFormActivity extends AppCompatActivity {
             etWorkInfo, etNickName, etRelationship, etWebsite;
     private AppCompatButton btnReset, btnAdd;
 
-    private DataBaseHandler dataBaseHandler;
+    private ContactModel contactModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,23 @@ public class ContactFormActivity extends AppCompatActivity {
 
         initUI();
         setListener();
+        setUI();
+    }
+
+    private void setUI() {
+        contactModel = (ContactModel) getIntent().getSerializableExtra("contact");
+        Log.e("TAG", "setUI: " + contactModel);
+        if (contactModel != null) {
+            etFullName.setText(contactModel.getFullName());
+            etPhone.setText(contactModel.getPhone());
+            etEmail.setText(contactModel.getEmail());
+            etNickName.setText(contactModel.getNickName());
+            etAddress.setText(contactModel.getAddress());
+            etWorkInfo.setText(contactModel.getWorkInfo());
+            etRelationship.setText(contactModel.getRelationship());
+            etWebsite.setText(contactModel.getWebsite());
+            btnAdd.setText("Edit");
+        }
     }
 
 
@@ -55,26 +74,50 @@ public class ContactFormActivity extends AppCompatActivity {
             etWebsite.setText("");
         });
         btnAdd.setOnClickListener(v -> {
+            String btnText = btnAdd.getText().toString();
             if (validate()) {
-                ContactModel contactModel = new ContactModel();
-                contactModel.setFullName(etFullName.getText().toString().trim());
-                contactModel.setPhone(etPhone.getText().toString().trim());
-                contactModel.setAddress(etAddress.getText().toString().trim());
-                contactModel.setEmail(etEmail.getText().toString().trim());
-                contactModel.setWebsite(etWebsite.getText().toString().trim());
-                contactModel.setRelationship(etRelationship.getText().toString().trim());
-                contactModel.setNickName(etNickName.getText().toString().trim());
-                contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
-                dataBaseHandler = new DataBaseHandler(ContactFormActivity.this);
-                boolean result = dataBaseHandler.addNewContact(contactModel);
-                if (result) {
-                    Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
-                    finish();
-                } else {
-                    Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                if (btnText.equals("Add")) {
+                    ContactModel contactModel = new ContactModel();
+                    contactModel.setFullName(etFullName.getText().toString().trim());
+                    contactModel.setPhone(etPhone.getText().toString().trim());
+                    contactModel.setAddress(etAddress.getText().toString().trim());
+                    contactModel.setEmail(etEmail.getText().toString().trim());
+                    contactModel.setWebsite(etWebsite.getText().toString().trim());
+                    contactModel.setRelationship(etRelationship.getText().toString().trim());
+                    contactModel.setNickName(etNickName.getText().toString().trim());
+                    contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
+                    boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).addNewContact(contactModel);
+                    if (result) {
+                        Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
+                        finish();
+                    } else {
+                        Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                    }
+
+                } else if (btnText.equals("Edit")) {
+                    ContactModel updatedContactModel = new ContactModel();
+                    updatedContactModel.setId(contactModel.getId());
+                    updatedContactModel.setFullName(etFullName.getText().toString().trim());
+                    updatedContactModel.setPhone(etPhone.getText().toString().trim());
+                    updatedContactModel.setAddress(etAddress.getText().toString().trim());
+                    updatedContactModel.setEmail(etEmail.getText().toString().trim());
+                    updatedContactModel.setWebsite(etWebsite.getText().toString().trim());
+                    updatedContactModel.setRelationship(etRelationship.getText().toString().trim());
+                    updatedContactModel.setNickName(etNickName.getText().toString().trim());
+                    updatedContactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
+
+                    boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).updateContact(updatedContactModel);
+
+                    if (result) {
+                        Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
+                        finish();
+                    } else {
+                        Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                    }
                 }
 
             }
+
         });
     }
 

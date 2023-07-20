@@ -93,4 +93,20 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         return delete > 0;
     }
 
+    public boolean updateContact(ContactModel contactModel){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DBConstants.COL_FULL_NAME, contactModel.getFullName());
+        values.put(DBConstants.COL_PHONE, contactModel.getPhone());
+        values.put(DBConstants.COL_EMAIL, contactModel.getEmail());
+        values.put(DBConstants.COL_NICKNAME, contactModel.getNickName());
+        values.put(DBConstants.COL_ADDRESS, contactModel.getAddress());
+        values.put(DBConstants.COL_WORK_INFO, contactModel.getWorkInfo());
+        values.put(DBConstants.COL_RELATIONSHIP, contactModel.getRelationship());
+        values.put(DBConstants.COL_WEBSITE, contactModel.getWebsite());
+        int update = db.update(DBConstants.TABLE_CONTACT, values, DBConstants.COL_ID + "=?", new String[]{String.valueOf(contactModel.getId())});
+        return update>0;
+
+    }
+
 }
