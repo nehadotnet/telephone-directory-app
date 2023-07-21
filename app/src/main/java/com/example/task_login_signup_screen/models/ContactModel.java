@@ -3,30 +3,8 @@ package com.example.task_login_signup_screen.models;
 import java.io.Serializable;
 
 public class ContactModel implements Serializable {
-    private int Id;
+    private int Id, userId;
     private String fullName, phone, email, nickName, address, workInfo, relationship, website;
-
-    public ContactModel() {
-    }
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int Id) {
-        this.Id = Id;
-    }
-
-    public ContactModel(int Id, String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website) {
-        this.Id = Id;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.email = email;
-        this.nickName = nickName;
-        this.address = address;
-        this.workInfo = workInfo;
-        this.relationship = relationship;
-        this.website = website;
-    }
 
     @Override
     public String toString() {
@@ -40,8 +18,42 @@ public class ContactModel implements Serializable {
                 ", workInfo='" + workInfo + '\'' +
                 ", relationship='" + relationship + '\'' +
                 ", website='" + website + '\'' +
+                ", userId=" + userId +
                 '}';
     }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public ContactModel(int id, String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website, int userId) {
+        Id = id;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.nickName = nickName;
+        this.address = address;
+        this.workInfo = workInfo;
+        this.relationship = relationship;
+        this.website = website;
+        this.userId = userId;
+    }
+
+    public ContactModel() {
+    }
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int Id) {
+        this.Id = Id;
+    }
+
 
     public String getFullName() {
         return fullName;

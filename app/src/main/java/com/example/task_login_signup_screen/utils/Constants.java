@@ -8,5 +8,6 @@ public interface Constants {
     public static final String PREF_EMAIL = "email";
     public static final String PREF_NAME = "username";
     public static final String PREF_TOKEN = "token";
+    public static final String PREF_USER_ID = "userId";
 
 }

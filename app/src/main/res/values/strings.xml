@@ -51,5 +51,6 @@
     <string name="phone_required">Required Phone Number</string>
     <string name="something_went_wrong">Something Went Wrong</string>
     <string name="contact_deleted_successfully">Contact Deleted Successfully</string>
+    <string name="are_you_sure_want_to_logout">Are you sure want to logout?</string>
 
 </resources>

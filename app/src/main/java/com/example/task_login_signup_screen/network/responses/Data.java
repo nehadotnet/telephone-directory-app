@@ -18,11 +18,23 @@ public class Data {
     @Expose
     private String token;
 
+    @SerializedName("User_Id")
+    @Expose
+    private Integer userId;
+
     /**
      * No args constructor for use in serialization
      *
      */
     public Data() {
+    }
+
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     /**
@@ -32,12 +44,13 @@ public class Data {
      * @param email
      * @param token
      */
-    public Data(Integer id, String name, String email, String token) {
+    public Data(Integer id, String name, String email, String token,Integer userId) {
         super();
         this.id = id;
         this.name = name;
         this.email = email;
         this.token = token;
+        this.userId=userId;
     }
 
     public Integer getId() {

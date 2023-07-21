@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.network.RetrofitClient;
@@ -77,10 +78,13 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<SignInResponse> call, Response<SignInResponse> response) {
                 if (response.body() != null && response.isSuccessful()) {
                     SignInResponse signInResponse = response.body();
-
-                    saveLoginState(signInResponse);
-                    switchScreen(signInResponse);
-
+                    Log.e("TAG", "onResponse: " + signInResponse.toString());
+                    if (signInResponse.getData() != null) {
+                        saveLoginState(signInResponse);
+                        switchScreen(signInResponse);
+                    } else  {
+                        Utils.showToastMessage(LoginActivity.this, signInResponse.getMessage());
+                    }
                 } else if (response.errorBody() != null) {
                     try {
                         Log.e("TAG", "onResponse() returned: " + response.errorBody().string());
@@ -105,6 +109,7 @@ public class LoginActivity extends AppCompatActivity {
             editor.putString(Constants.PREF_TOKEN, signInResponse.getData().getToken());
             editor.putString(Constants.PREF_EMAIL, signInResponse.getData().getEmail());
             editor.putString(Constants.PREF_NAME, signInResponse.getData().getName());
+            editor.putInt(Constants.PREF_USER_ID, signInResponse.getData().getId());
             editor.apply();
         }
     }

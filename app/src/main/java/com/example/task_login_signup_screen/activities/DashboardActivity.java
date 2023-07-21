@@ -62,10 +62,11 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
         SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
         String email = sharedPreferences.getString(Constants.PREF_NAME, "");
         String name = sharedPreferences.getString(Constants.PREF_EMAIL, "");
+        int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
         userDetail.setText("UserName: " + name + "\n\nEmail: " + email);
 
         arrayContact.clear();
-        arrayContact = DataBaseHandler.getInstance(this).getAllContact();
+        arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
         rvContacts.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ContactAdapter(this, arrayContact, this);
         rvContacts.setAdapter(adapter);
@@ -80,7 +81,7 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     }
 
     private void refreshAdapter() {
-        arrayContact = DataBaseHandler.getInstance(this).getAllContact();
+        arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
         adapter.refreshAdapter(arrayContact);
         rvContacts.scrollToPosition(arrayContact.size() - 1);
     }
@@ -95,11 +96,27 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.opt_logout) {
-            Utils.showToastMessage(DashboardActivity.this, "logout");
+            userLogOut();
         } else if (itemId == R.id.opt_settings) {
             Utils.showToastMessage(DashboardActivity.this, "setting");
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void userLogOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.logout))
+                .setMessage(getString(R.string.are_you_sure_want_to_logout))
+                .setPositiveButton(getString(R.string.dialog_yes), (dialog, which) -> {
+                    SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    Utils.navigateScreen(DashboardActivity.this, SplashActivity.class);
+                    finishAffinity();
+                }).setNegativeButton(getString(R.string.dialog_no), (dialog, which) -> {
+                });
+        builder.show();
     }
 
     @Override
@@ -112,65 +129,24 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
                     .setTitle(getString(R.string.delete_contact))
                     .setMessage(getString(R.string.are_you_sure_want_to_delete))
                     .setPositiveButton(getString(R.string.dialog_yes), (dialog, which) -> {
-                        // arrayContact.remove(position);
-
-                        Log.e("TAG", "onItemClick: "+ arrayContact.get(position).toString() );
+                        Log.e("TAG", "onItemClick: " + arrayContact.get(position).toString());
                         boolean result = DataBaseHandler.getInstance(DashboardActivity.this).deleteContact(arrayContact.get(position).getId());
                         if (result) {
                             Utils.showToastMessage(DashboardActivity.this, getString(R.string.contact_deleted_successfully));
                             arrayContact.clear();
-                            arrayContact = DataBaseHandler.getInstance(this).getAllContact();
-                            Log.e("TAG", "onItemClick: " + arrayContact.size() );
-                           adapter.refreshAdapter(arrayContact);
+                            arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
+                            Log.e("TAG", "onItemClick: " + arrayContact.size());
+                            adapter.refreshAdapter(arrayContact);
                         }
                         adapter.notifyDataSetChanged();
                     })
                     .setNegativeButton(getString(R.string.dialog_no), (dialog, which) -> {
-
                     });
             builder.show();
         } else if (type == 30) {
-
-            Intent intent=new Intent(DashboardActivity.this,ContactFormActivity.class);
-            intent.putExtra("contact",arrayContact.get(position));
+            Intent intent = new Intent(DashboardActivity.this, ContactFormActivity.class);
+            intent.putExtra("contact", arrayContact.get(position));
             startActivity(intent);
-
-
-//            Dialog dialog = new Dialog(this);
-//            dialog.setContentView(R.layout.add_update_layout);
-//
-//            EditText edName = dialog.findViewById(R.id.ed_name);
-//            EditText edNumber = dialog.findViewById(R.id.ed_number);
-//            AppCompatButton btnAction = dialog.findViewById(R.id.btn_add);
-//            TextView tvTitle = dialog.findViewById(R.id.tv_title);
-//
-//            btnAction.setText("Update");
-//            tvTitle.setText("Update Contact");
-//
-//            edName.setText((arrayContact.get(position)).getFullName());
-//            edNumber.setText((arrayContact.get(position)).getPhone());
-//
-//            btnAction.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    String name = "", number = "";
-//                    if (!edName.getText().toString().equals("")) {
-//                        name = edName.getText().toString();
-//                    }
-//                    if (!edName.getText().toString().equals("")) {
-//                        number = edNumber.getText().toString();
-//                    } else {
-//                        Utils.showToastMessage(DashboardActivity.this, getString(R.string.all_fields_required));
-//                    }
-//
-//                    arrayContact.set(position, new ContactModel(0, name, number, "", "", "", "", "", ""));
-//                    adapter.notifyItemChanged(position);
-//
-//                    dialog.dismiss();
-//                    Utils.showToastMessage(DashboardActivity.this, getString(R.string.updated_successfully));
-//                }
-//            });
-//            dialog.show();
         }
     }
 }

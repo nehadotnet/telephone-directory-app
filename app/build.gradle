@@ -45,4 +45,7 @@ dependencies {
 
     //https://github.com/airbnb/lottie-android
     implementation 'com.airbnb.android:lottie:6.0.1'
+
+    // SpinKit - <https://github.com/ybq/Android-SpinKit>
+    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
 }

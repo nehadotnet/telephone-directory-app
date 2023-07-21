@@ -1,16 +1,23 @@
 package com.example.task_login_signup_screen.activities;
 
+import static com.example.task_login_signup_screen.utils.Constants.HANDLER_DELAY;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.db.DataBaseHandler;
 import com.example.task_login_signup_screen.models.ContactModel;
+import com.example.task_login_signup_screen.utils.Constants;
 import com.example.task_login_signup_screen.utils.Utils;
+import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import okhttp3.internal.Util;
@@ -20,7 +27,10 @@ public class ContactFormActivity extends AppCompatActivity {
             etWorkInfo, etNickName, etRelationship, etWebsite;
     private AppCompatButton btnReset, btnAdd;
 
+    private SpinKitView spinKitView;
+
     private ContactModel contactModel;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +40,7 @@ public class ContactFormActivity extends AppCompatActivity {
         initUI();
         setListener();
         setUI();
+        sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
     }
 
     private void setUI() {
@@ -60,6 +71,7 @@ public class ContactFormActivity extends AppCompatActivity {
         etWebsite = findViewById(R.id.et_website);
         btnReset = findViewById(R.id.btn_reset);
         btnAdd = findViewById(R.id.btn_add);
+        spinKitView = findViewById(R.id.spin_kit);
     }
 
     private void setListener() {
@@ -75,49 +87,53 @@ public class ContactFormActivity extends AppCompatActivity {
         });
         btnAdd.setOnClickListener(v -> {
             String btnText = btnAdd.getText().toString();
+            int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
             if (validate()) {
-                if (btnText.equals("Add")) {
-                    ContactModel contactModel = new ContactModel();
-                    contactModel.setFullName(etFullName.getText().toString().trim());
-                    contactModel.setPhone(etPhone.getText().toString().trim());
-                    contactModel.setAddress(etAddress.getText().toString().trim());
-                    contactModel.setEmail(etEmail.getText().toString().trim());
-                    contactModel.setWebsite(etWebsite.getText().toString().trim());
-                    contactModel.setRelationship(etRelationship.getText().toString().trim());
-                    contactModel.setNickName(etNickName.getText().toString().trim());
-                    contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
-                    boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).addNewContact(contactModel);
-                    if (result) {
-                        Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
-                        finish();
-                    } else {
-                        Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                spinKitView.setVisibility(View.VISIBLE);
+                new Handler().postDelayed(() -> {
+                    spinKitView.setVisibility(View.GONE);
+                    if (btnText.equals("Add")) {
+                        ContactModel contactModel = new ContactModel();
+                        contactModel.setFullName(etFullName.getText().toString().trim());
+                        contactModel.setPhone(etPhone.getText().toString().trim());
+                        contactModel.setAddress(etAddress.getText().toString().trim());
+                        contactModel.setEmail(etEmail.getText().toString().trim());
+                        contactModel.setWebsite(etWebsite.getText().toString().trim());
+                        contactModel.setRelationship(etRelationship.getText().toString().trim());
+                        contactModel.setNickName(etNickName.getText().toString().trim());
+                        contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
+                        contactModel.setUserId(userId);
+                        boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).addNewContact(contactModel);
+                        if (result) {
+                            Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
+                            finish();
+                        } else {
+                            Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                        }
+
+                    } else if (btnText.equals("Edit")) {
+                        ContactModel updatedContactModel = new ContactModel();
+                        updatedContactModel.setId(contactModel.getId());
+                        updatedContactModel.setFullName(etFullName.getText().toString().trim());
+                        updatedContactModel.setPhone(etPhone.getText().toString().trim());
+                        updatedContactModel.setAddress(etAddress.getText().toString().trim());
+                        updatedContactModel.setEmail(etEmail.getText().toString().trim());
+                        updatedContactModel.setWebsite(etWebsite.getText().toString().trim());
+                        updatedContactModel.setRelationship(etRelationship.getText().toString().trim());
+                        updatedContactModel.setNickName(etNickName.getText().toString().trim());
+                        updatedContactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
+
+                        boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).updateContact(updatedContactModel);
+
+                        if (result) {
+                            Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
+                            finish();
+                        } else {
+                            Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
+                        }
                     }
-
-                } else if (btnText.equals("Edit")) {
-                    ContactModel updatedContactModel = new ContactModel();
-                    updatedContactModel.setId(contactModel.getId());
-                    updatedContactModel.setFullName(etFullName.getText().toString().trim());
-                    updatedContactModel.setPhone(etPhone.getText().toString().trim());
-                    updatedContactModel.setAddress(etAddress.getText().toString().trim());
-                    updatedContactModel.setEmail(etEmail.getText().toString().trim());
-                    updatedContactModel.setWebsite(etWebsite.getText().toString().trim());
-                    updatedContactModel.setRelationship(etRelationship.getText().toString().trim());
-                    updatedContactModel.setNickName(etNickName.getText().toString().trim());
-                    updatedContactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
-
-                    boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).updateContact(updatedContactModel);
-
-                    if (result) {
-                        Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
-                        finish();
-                    } else {
-                        Utils.showToastMessage(ContactFormActivity.this, getString(R.string.something_went_wrong));
-                    }
-                }
-
+                }, HANDLER_DELAY);
             }
-
         });
     }
 

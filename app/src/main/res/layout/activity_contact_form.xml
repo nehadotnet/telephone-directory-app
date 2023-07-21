@@ -185,4 +185,14 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.FadingCircle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:SpinKit_Color="@color/dark_blue" />
+
 </RelativeLayout>
