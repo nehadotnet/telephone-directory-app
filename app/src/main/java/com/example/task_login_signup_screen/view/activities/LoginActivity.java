@@ -1,5 +1,6 @@
-package com.example.task_login_signup_screen.activities;
+package com.example.task_login_signup_screen.view.activities;
 
+import static com.example.task_login_signup_screen.utils.Constants.PREF_FILENAME;
 import static com.example.task_login_signup_screen.utils.Utils.navigateScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,7 +11,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.network.RetrofitClient;
@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void saveLoginState(SignInResponse signInResponse) {
         if (signInResponse != null && signInResponse.getData() != null) {
-            SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences(PREF_FILENAME, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(Constants.PREF_TOKEN, signInResponse.getData().getToken());
             editor.putString(Constants.PREF_EMAIL, signInResponse.getData().getEmail());

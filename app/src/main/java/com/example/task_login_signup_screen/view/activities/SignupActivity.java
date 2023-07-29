@@ -1,4 +1,4 @@
-package com.example.task_login_signup_screen.activities;
+package com.example.task_login_signup_screen.view.activities;
 
 import static com.example.task_login_signup_screen.utils.Utils.isValidEmail;
 import static com.example.task_login_signup_screen.utils.Utils.navigateScreen;

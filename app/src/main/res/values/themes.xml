@@ -9,6 +9,7 @@
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textSize">18sp</item>
         <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>
+        <item name="shapeAppearanceOverlay">@style/FabShapeAppearance</item>
     </style>
 
     <style name="CustomButton">
@@ -25,6 +26,10 @@
         <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
         <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
         <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
+    <style name="FabShapeAppearance">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>
