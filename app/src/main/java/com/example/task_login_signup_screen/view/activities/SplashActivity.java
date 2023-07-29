@@ -1,4 +1,4 @@
-package com.example.task_login_signup_screen.activities;
+package com.example.task_login_signup_screen.view.activities;
 
 import static com.example.task_login_signup_screen.utils.Constants.PREF_EMAIL;
 import static com.example.task_login_signup_screen.utils.Constants.PREF_NAME;

@@ -1,31 +1,38 @@
-package com.example.task_login_signup_screen.activities;
+package com.example.task_login_signup_screen.view.activities;
 
 import static com.example.task_login_signup_screen.utils.Constants.HANDLER_DELAY;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.db.DataBaseHandler;
 import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.utils.Constants;
 import com.example.task_login_signup_screen.utils.Utils;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import okhttp3.internal.Util;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactFormActivity extends AppCompatActivity {
     private TextInputEditText etFullName, etPhone, etEmail, etAddress,
             etWorkInfo, etNickName, etRelationship, etWebsite;
     private AppCompatButton btnReset, btnAdd;
+
+    private FloatingActionButton btnFab;
+    private CircleImageView ivProfile;
 
     private SpinKitView spinKitView;
 
@@ -72,6 +79,8 @@ public class ContactFormActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.btn_reset);
         btnAdd = findViewById(R.id.btn_add);
         spinKitView = findViewById(R.id.spin_kit);
+        ivProfile = findViewById(R.id.civ_profile_image);
+        btnFab = findViewById(R.id.btn_fab);
     }
 
     private void setListener() {
@@ -135,6 +144,20 @@ public class ContactFormActivity extends AppCompatActivity {
                 }, HANDLER_DELAY);
             }
         });
+        btnFab.setOnClickListener(v ->
+                ImagePicker.with(ContactFormActivity.this)
+                        .crop()
+                        .start());
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            ivProfile.setImageURI(data.getData());
+        } else if (resultCode == ImagePicker.RESULT_ERROR) {
+            Utils.showToastMessage(this, ImagePicker.getError(data));
+        }
     }
 
     private boolean validate() {

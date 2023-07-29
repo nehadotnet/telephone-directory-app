@@ -1,6 +1,6 @@
 package com.example.task_login_signup_screen.utils;
 
-import android.app.Activity;
+    import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;

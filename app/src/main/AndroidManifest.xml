@@ -16,22 +16,25 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activities.ContactFormActivity"
+            android:name=".view.activities.SplashActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".view.activities.ContactFormActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DashboardActivity"
+            android:name=".view.activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CreateNewPasswordActivity"
+            android:name=".view.activities.DashboardActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SignupActivity"
+            android:name=".view.activities.CreateNewPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".view.activities.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.activities.NavigationDrawerActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
