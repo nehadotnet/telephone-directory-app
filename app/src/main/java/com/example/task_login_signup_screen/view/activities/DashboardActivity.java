@@ -1,103 +1,92 @@
 package com.example.task_login_signup_screen.view.activities;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.task_login_signup_screen.db.DataBaseHandler;
-import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.R;
-import com.example.task_login_signup_screen.adapter.ContactAdapter;
-import com.example.task_login_signup_screen.listeners.OnItemClickListener;
 import com.example.task_login_signup_screen.utils.Constants;
 import com.example.task_login_signup_screen.utils.Utils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.example.task_login_signup_screen.view.fragments.HomeFragment;
+import com.example.task_login_signup_screen.view.fragments.ProfileFragment;
+import com.example.task_login_signup_screen.view.fragments.SettingFragment;
+import com.google.android.material.navigation.NavigationView;
 
-import java.util.ArrayList;
+public class DashboardActivity extends AppCompatActivity {
 
-public class DashboardActivity extends AppCompatActivity implements OnItemClickListener {
-    TextView userDetail;
-    RecyclerView rvContacts;
-    Toolbar toolbar;
-    FloatingActionButton fabAddContact;
-
-    ArrayList<ContactModel> arrayContact = new ArrayList<>();
-    ContactAdapter adapter;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private Toolbar toolbar;
+    String title = "Home";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        iniUI();
-        setUI();
-    }
-
-    private void iniUI() {
-        userDetail = findViewById(R.id.tv_user_detail);
         toolbar = findViewById(R.id.toolbar);
-        rvContacts = findViewById(R.id.rv_contacts);
-        fabAddContact = findViewById(R.id.btn_open_dialog);
 
-    }
-
-    private void setUI() {
         setSupportActionBar(toolbar);
-        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
-        String email = sharedPreferences.getString(Constants.PREF_NAME, "");
-        String name = sharedPreferences.getString(Constants.PREF_EMAIL, "");
-        int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
-        userDetail.setText("UserName: " + name + "\n\nEmail: " + email);
 
-        arrayContact.clear();
-        arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
-        rvContacts.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new ContactAdapter(this, arrayContact, this);
-        rvContacts.setAdapter(adapter);
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
 
-        fabAddContact.setOnClickListener(new View.OnClickListener() {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                drawerLayout, toolbar, R.string.OpenDrawer, R.string.CloseDrawer);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.fragment_container, new HomeFragment());
+        ft.addToBackStack("");
+        ft.commit();
+        if (title.length() != 0 && getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(title);
+        }
+        setHeaderDetails();
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onClick(View v) {
-                Utils.navigateScreen(DashboardActivity.this, ContactFormActivity.class);
-                refreshAdapter();
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                Fragment fragment = null;
+
+                if (id == R.id.nav_home) {
+                    fragment = new HomeFragment();
+                    title = getString(R.string.home);
+                } else if (id == R.id.nav_profile) {
+                    fragment = new ProfileFragment();
+                    title = getString(R.string.profile);
+                } else if (id == R.id.nav_setting) {
+                    fragment = new SettingFragment();
+                    title = getString(R.string.settings);
+
+                } else if (id == R.id.nav_logout) {
+                    userLogOut();
+                }
+                if (fragment != null) {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.fragment_container, fragment);
+                    ft.commit();
+                    if (title.length() != 0 && getSupportActionBar() != null) {
+                        getSupportActionBar().setTitle(title);
+                    }
+                }
+                return false;
             }
         });
-    }
-
-    private void refreshAdapter() {
-        arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
-        adapter.refreshAdapter(arrayContact);
-        rvContacts.scrollToPosition(arrayContact.size() - 1);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        new MenuInflater(this).inflate(R.menu.option_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int itemId = item.getItemId();
-        if (itemId == R.id.opt_logout) {
-            userLogOut();
-        } else if (itemId == R.id.opt_settings) {
-            Utils.showToastMessage(DashboardActivity.this, "setting");
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     private void userLogOut() {
@@ -117,33 +106,23 @@ public class DashboardActivity extends AppCompatActivity implements OnItemClickL
     }
 
     @Override
-    public void onItemClick(int position, int type) {
-        if (type == 10) {
-            String phoneNumber = arrayContact.get(position).getPhone();
-            Utils.dialContact(DashboardActivity.this, phoneNumber);
-        } else if (type == 20) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.delete_contact))
-                    .setMessage(getString(R.string.are_you_sure_want_to_delete))
-                    .setPositiveButton(getString(R.string.dialog_yes), (dialog, which) -> {
-                        Log.e("TAG", "onItemClick: " + arrayContact.get(position).toString());
-                        boolean result = DataBaseHandler.getInstance(DashboardActivity.this).deleteContact(arrayContact.get(position).getId());
-                        if (result) {
-                            Utils.showToastMessage(DashboardActivity.this, getString(R.string.contact_deleted_successfully));
-                            arrayContact.clear();
-                            arrayContact = DataBaseHandler.getInstance(this).getAllContact(DashboardActivity.this);
-                            Log.e("TAG", "onItemClick: " + arrayContact.size());
-                            adapter.refreshAdapter(arrayContact);
-                        }
-                        adapter.notifyDataSetChanged();
-                    })
-                    .setNegativeButton(getString(R.string.dialog_no), (dialog, which) -> {
-                    });
-            builder.show();
-        } else if (type == 30) {
-            Intent intent = new Intent(DashboardActivity.this, ContactFormActivity.class);
-            intent.putExtra("contact", arrayContact.get(position));
-            startActivity(intent);
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.close();
+        } else {
+            super.onBackPressed();
         }
+    }
+
+    private void setHeaderDetails() {
+        SharedPreferences sharedPreferences = getSharedPreferences(Constants.PREF_FILENAME, MODE_PRIVATE);
+        String email = sharedPreferences.getString(Constants.PREF_EMAIL, "");
+        String name = sharedPreferences.getString(Constants.PREF_NAME, "");
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView tvName = headerView.findViewById(R.id.tv_user_name);
+        tvName.setText(name);
+        TextView tvEmail = headerView.findViewById(R.id.tv_user_email);
+        tvEmail.setText(email);
     }
 }
