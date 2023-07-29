@@ -1,15 +1,26 @@
 package com.example.task_login_signup_screen.models;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class ContactModel implements Serializable {
     private int Id, userId;
     private String fullName, phone, email, nickName, address, workInfo, relationship, website;
+    private byte[] imageData;
+
+    public byte[] getImageData() {
+        return imageData;
+    }
+
+    public void setImageData(byte[] imageData) {
+        this.imageData = imageData;
+    }
 
     @Override
     public String toString() {
         return "ContactModel{" +
                 "Id=" + Id +
+                ", userId=" + userId +
                 ", fullName='" + fullName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
@@ -18,8 +29,22 @@ public class ContactModel implements Serializable {
                 ", workInfo='" + workInfo + '\'' +
                 ", relationship='" + relationship + '\'' +
                 ", website='" + website + '\'' +
-                ", userId=" + userId +
+                ", imageData=" + Arrays.toString(imageData) +
                 '}';
+    }
+
+    public ContactModel(int id, int userId, String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website, byte[] imageData) {
+        Id = id;
+        this.userId = userId;
+        this.fullName = fullName;
+        this.phone = phone;
+        this.email = email;
+        this.nickName = nickName;
+        this.address = address;
+        this.workInfo = workInfo;
+        this.relationship = relationship;
+        this.website = website;
+        this.imageData = imageData;
     }
 
     public int getUserId() {
@@ -29,20 +54,6 @@ public class ContactModel implements Serializable {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-    public ContactModel(int id, String fullName, String phone, String email, String nickName, String address, String workInfo, String relationship, String website, int userId) {
-        Id = id;
-        this.fullName = fullName;
-        this.phone = phone;
-        this.email = email;
-        this.nickName = nickName;
-        this.address = address;
-        this.workInfo = workInfo;
-        this.relationship = relationship;
-        this.website = website;
-        this.userId = userId;
-    }
-
     public ContactModel() {
     }
 

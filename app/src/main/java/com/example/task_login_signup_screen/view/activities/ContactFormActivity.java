@@ -9,6 +9,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -24,6 +25,11 @@ import com.github.ybq.android.spinkit.SpinKitView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactFormActivity extends AppCompatActivity {
@@ -38,6 +44,7 @@ public class ContactFormActivity extends AppCompatActivity {
 
     private ContactModel contactModel;
     SharedPreferences sharedPreferences;
+    private byte[] imageData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +119,7 @@ public class ContactFormActivity extends AppCompatActivity {
                         contactModel.setNickName(etNickName.getText().toString().trim());
                         contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
                         contactModel.setUserId(userId);
+                        contactModel.setImageData(imageData);
                         boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).addNewContact(contactModel);
                         if (result) {
                             Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
@@ -154,7 +162,28 @@ public class ContactFormActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
-            ivProfile.setImageURI(data.getData());
+            Uri imageUri = data.getData();
+            ivProfile.setImageURI(imageUri);
+            if (contactModel == null) {
+                contactModel = new ContactModel(); // Create a new ContactModel if it's null
+            }
+            // Convert the image URI to a byte array and store it in the ContactModel object
+            try {
+                InputStream inputStream = getContentResolver().openInputStream(imageUri);
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
+                imageData = byteArrayOutputStream.toByteArray();
+                contactModel.setImageData(imageData);
+                inputStream.close();
+                byteArrayOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Utils.showToastMessage(this, "Error loading image.");
+            }
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Utils.showToastMessage(this, ImagePicker.getError(data));
         }

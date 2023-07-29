@@ -14,5 +14,7 @@ public interface DBConstants {
     String COL_RELATIONSHIP = "RELATIONSHIP";
     String COL_WEBSITE = "WEBSITE";
     String COL_USERID = "USER_ID";
+    String COL_IMAGE="IMAGE";
+
 
 }

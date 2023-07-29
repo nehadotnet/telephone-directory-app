@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -39,10 +40,10 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createContactTable = "Create TABLE " + DBConstants.TABLE_CONTACT + " (" + DBConstants.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        String createContactTable = "CREATE TABLE " + DBConstants.TABLE_CONTACT + " (" + DBConstants.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 DBConstants.COL_FULL_NAME + " VARCHAR, " + DBConstants.COL_PHONE + " VARCHAR, " + DBConstants.COL_EMAIL + " VARCHAR, " +
                 DBConstants.COL_NICKNAME + " VARCHAR, " + DBConstants.COL_ADDRESS + " VARCHAR, " + DBConstants.COL_WORK_INFO + " VARCHAR, " +
-                DBConstants.COL_RELATIONSHIP + " VARCHAR, " + DBConstants.COL_WEBSITE + " VARCHAR, " + DBConstants.COL_USERID + " INTEGER)";
+                DBConstants.COL_RELATIONSHIP + " VARCHAR, " + DBConstants.COL_WEBSITE + " VARCHAR, " + DBConstants.COL_USERID + " INTEGER ," + DBConstants.COL_IMAGE + " BLOB)";
         db.execSQL(createContactTable);
     }
 
@@ -64,8 +65,16 @@ public class DataBaseHandler extends SQLiteOpenHelper {
         values.put(DBConstants.COL_RELATIONSHIP, contactModel.getRelationship());
         values.put(DBConstants.COL_WEBSITE, contactModel.getWebsite());
         values.put(DBConstants.COL_USERID, contactModel.getUserId());
+        String base64Image = Base64.encodeToString(contactModel.getImageData(), Base64.DEFAULT);
+        values.put(DBConstants.COL_IMAGE, base64Image);
+
         long result = db.insert(DBConstants.TABLE_CONTACT, null, values);
         db.close();
+        if (result > 0) {
+            Log.d("DataBaseHandler", "New contact added successfully!");
+        } else {
+            Log.e("DataBaseHandler", "Failed to add new contact!");
+        }
         return result > 0l;
     }
 
