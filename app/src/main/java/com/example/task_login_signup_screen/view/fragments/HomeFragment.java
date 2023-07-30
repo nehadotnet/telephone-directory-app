@@ -46,7 +46,7 @@ public class HomeFragment extends Fragment implements OnItemClickListener {
         setContactList();
         fabAddContact.setOnClickListener(v -> {
             Utils.navigateScreen(getContext(), ContactFormActivity.class);
-//            refreshAdapter();
+            refreshAdapter();
         });
     }
 

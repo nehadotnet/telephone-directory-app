@@ -43,8 +43,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/civ_profile_image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="172dp"
+                android:layout_height="172dp"
                 android:src="@drawable/baseline_person_24"
                 app:civ_circle_background_color="@color/light_grey"
                 app:civ_border_color="@color/white"

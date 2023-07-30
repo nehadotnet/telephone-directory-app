@@ -20,11 +20,11 @@
             android:gravity="center_vertical"
             android:padding="12dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_contact"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="@drawable/avatar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/user"
                 android:contentDescription="@string/contact_image" />
 
             <LinearLayout

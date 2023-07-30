@@ -2,6 +2,9 @@ package com.example.task_login_signup_screen.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.listeners.OnItemClickListener;
+import com.example.task_login_signup_screen.utils.ImageUtils;
+import com.example.task_login_signup_screen.utils.Utils;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
 
@@ -32,8 +39,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void refreshAdapter(ArrayList<ContactModel> contactModels){
-        this.dataSet=contactModels;
+    public void refreshAdapter(ArrayList<ContactModel> contactModels) {
+        this.dataSet = contactModels;
     }
 
     @NonNull
@@ -50,11 +57,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.tvName.setText(dataSet.get(position).getFullName());
         holder.tvNumber.setText(dataSet.get(position).getPhone());
 
+        byte[] imageData = dataSet.get(position).getImageData();
+        if (imageData != null && imageData.length > 0) {
+            Bitmap contactImage = ImageUtils.decodeBase64Image(imageData);
+            holder.ivContactImage.setImageBitmap(contactImage);
+        } else {
+            holder.ivContactImage.setImageResource(R.drawable.user);
+        }
+
         holder.llRow.setOnClickListener(v -> onItemClickListener.onItemClick(holder.getAdapterPosition(), 30));
 
         holder.btnDelete.setOnClickListener(v -> {
-            Log.e("TAG", "onBindViewHolder: " + holder.getAdapterPosition() );
-            Log.e("TAG", "onBindViewHolder: " + dataSet.get(holder.getAdapterPosition()).toString() );
             onItemClickListener.onItemClick(holder.getAdapterPosition(), 20);
         });
 
@@ -69,18 +82,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvNumber;
-        ImageView ivContact;
         LinearLayout llRow;
         AppCompatButton btnDelete, btnCall;
+        CircleImageView ivContactImage;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvName = itemView.findViewById(R.id.tv_title);
             tvNumber = itemView.findViewById(R.id.tv_number);
-            ivContact = itemView.findViewById(R.id.iv_contact);
             llRow = itemView.findViewById(R.id.ll_row);
             btnDelete = itemView.findViewById(R.id.btn_delete);
             btnCall = itemView.findViewById(R.id.btn_call);
+            ivContactImage = itemView.findViewById(R.id.iv_contact);
+
         }
     }
 }

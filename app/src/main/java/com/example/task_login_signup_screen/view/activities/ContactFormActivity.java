@@ -5,10 +5,13 @@ import static com.example.task_login_signup_screen.utils.Constants.HANDLER_DELAY
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +22,7 @@ import com.example.task_login_signup_screen.R;
 import com.example.task_login_signup_screen.db.DataBaseHandler;
 import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.utils.Constants;
+import com.example.task_login_signup_screen.utils.ImageUtils;
 import com.example.task_login_signup_screen.utils.Utils;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.github.ybq.android.spinkit.SpinKitView;
@@ -39,12 +43,12 @@ public class ContactFormActivity extends AppCompatActivity {
 
     private FloatingActionButton btnFab;
     private CircleImageView ivProfile;
-
     private SpinKitView spinKitView;
-
     private ContactModel contactModel;
     SharedPreferences sharedPreferences;
     private byte[] imageData;
+
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +73,13 @@ public class ContactFormActivity extends AppCompatActivity {
             etWorkInfo.setText(contactModel.getWorkInfo());
             etRelationship.setText(contactModel.getRelationship());
             etWebsite.setText(contactModel.getWebsite());
+            ivProfile.setImageBitmap(ImageUtils.decodeBase64Image(contactModel.getImageData()));
             btnAdd.setText("Edit");
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("Edit " + contactModel.getFullName() + "'s Contact");
+        } else {
+            if (getSupportActionBar() != null)
+                getSupportActionBar().setTitle("Add New Contact");
         }
     }
 
@@ -88,6 +98,8 @@ public class ContactFormActivity extends AppCompatActivity {
         spinKitView = findViewById(R.id.spin_kit);
         ivProfile = findViewById(R.id.civ_profile_image);
         btnFab = findViewById(R.id.btn_fab);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 
     private void setListener() {
@@ -119,7 +131,8 @@ public class ContactFormActivity extends AppCompatActivity {
                         contactModel.setNickName(etNickName.getText().toString().trim());
                         contactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
                         contactModel.setUserId(userId);
-                        contactModel.setImageData(imageData);
+                        if (imageData != null && imageData.length > 0)
+                            contactModel.setImageData(imageData);
                         boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).addNewContact(contactModel);
                         if (result) {
                             Utils.navigateScreen(ContactFormActivity.this, DashboardActivity.class);
@@ -139,6 +152,7 @@ public class ContactFormActivity extends AppCompatActivity {
                         updatedContactModel.setRelationship(etRelationship.getText().toString().trim());
                         updatedContactModel.setNickName(etNickName.getText().toString().trim());
                         updatedContactModel.setWorkInfo(etWorkInfo.getText().toString().trim());
+                        updatedContactModel.setImageData(imageData);
 
                         boolean result = DataBaseHandler.getInstance(ContactFormActivity.this).updateContact(updatedContactModel);
 
@@ -164,25 +178,13 @@ public class ContactFormActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK && data != null) {
             Uri imageUri = data.getData();
             ivProfile.setImageURI(imageUri);
-            if (contactModel == null) {
-                contactModel = new ContactModel(); // Create a new ContactModel if it's null
-            }
             // Convert the image URI to a byte array and store it in the ContactModel object
             try {
-                InputStream inputStream = getContentResolver().openInputStream(imageUri);
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                byte[] buffer = new byte[1024];
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                }
-                imageData = byteArrayOutputStream.toByteArray();
-                contactModel.setImageData(imageData);
-                inputStream.close();
-                byteArrayOutputStream.close();
+                imageData = ImageUtils.convertUriToBase64String(this, imageUri);
+                imageData = ImageUtils.compressImage(imageData);
             } catch (IOException e) {
                 e.printStackTrace();
-                Utils.showToastMessage(this, "Error loading image.");
+                Utils.showToastMessage(this, "Unable to set image to your profile.");
             }
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
             Utils.showToastMessage(this, ImagePicker.getError(data));
@@ -206,7 +208,5 @@ public class ContactFormActivity extends AppCompatActivity {
             return false;
         }
         return true;
-
     }
-
 }
