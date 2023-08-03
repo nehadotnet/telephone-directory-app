@@ -13,6 +13,9 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.example.task_login_signup_screen.R;
+import com.example.task_login_signup_screen.db.DataBaseHandler;
+import com.example.task_login_signup_screen.models.ContactModel;
+import com.example.task_login_signup_screen.models.UserProfileModel;
 import com.example.task_login_signup_screen.network.RetrofitClient;
 import com.example.task_login_signup_screen.network.requests.SignInRequest;
 import com.example.task_login_signup_screen.network.responses.SignInResponse;
@@ -81,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
                     Log.e("TAG", "onResponse: " + signInResponse.toString());
                     if (signInResponse.getData() != null) {
                         saveLoginState(signInResponse);
+                        saveUserDetailsToDB(signInResponse);
                         switchScreen(signInResponse);
                     } else  {
                         Utils.showToastMessage(LoginActivity.this, signInResponse.getMessage());
@@ -100,6 +104,23 @@ public class LoginActivity extends AppCompatActivity {
                 Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    private void saveUserDetailsToDB(SignInResponse signInResponse) {
+        if (!checkUserExistence(signInResponse.getData().getEmail())){
+            UserProfileModel userProfileModel = new UserProfileModel();
+            userProfileModel.setFullName(signInResponse.getData().getName());
+            userProfileModel.setEmail(signInResponse.getData().getEmail());
+            userProfileModel.setUserId(signInResponse.getData().getId());
+            boolean result = DataBaseHandler.getInstance(this).saveUserDetails(userProfileModel);
+            if (!result) {
+                Utils.showToastMessage(this, getString(R.string.something_went_wrong));
+            }
+
+        }
+    }
+    private boolean checkUserExistence(String email) {
+        return DataBaseHandler.getInstance(this).checkUserExistence(email);
     }
 
     private void saveLoginState(SignInResponse signInResponse) {

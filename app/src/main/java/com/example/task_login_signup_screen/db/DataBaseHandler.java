@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.task_login_signup_screen.models.ContactModel;
+import com.example.task_login_signup_screen.models.UserProfileModel;
 import com.example.task_login_signup_screen.network.responses.Data;
 import com.example.task_login_signup_screen.utils.Constants;
 
@@ -49,6 +50,12 @@ public class DataBaseHandler extends SQLiteOpenHelper {
                 DBConstants.COL_RELATIONSHIP + " VARCHAR, " + DBConstants.COL_WEBSITE + " VARCHAR, " + DBConstants.COL_USERID + " INTEGER ," +
                 DBConstants.COL_IMAGE + " BLOB)";
         db.execSQL(createContactTable);
+
+        String createUserProfileTable = "CREATE TABLE " + DBConstants.USER_TABLE_PROFILE + " (" + DBConstants.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                DBConstants.COL_FULL_NAME + " VARCHAR, " + DBConstants.COL_PHONE + " VARCHAR, " + DBConstants.COL_EMAIL + " VARCHAR, " +
+                DBConstants.COL_USERID + " INTEGER," + DBConstants.COL_IMAGE + " BLOB)";
+        Log.e("TAG", "onCreate: " + createUserProfileTable);
+        db.execSQL(createUserProfileTable);
     }
 
     @Override
@@ -140,4 +147,71 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     }
 
+    public boolean saveUserDetails(UserProfileModel userProfileModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DBConstants.COL_FULL_NAME, userProfileModel.getFullName());
+        values.put(DBConstants.COL_PHONE, userProfileModel.getPhone());
+        values.put(DBConstants.COL_EMAIL, userProfileModel.getEmail());
+        if (userProfileModel.getImageData() != null) {
+            String base64Image = Base64.encodeToString(userProfileModel.getImageData(), Base64.DEFAULT);
+            values.put(DBConstants.COL_IMAGE, base64Image);
+        }
+        values.put(DBConstants.COL_USERID, userProfileModel.getUserId());
+        long result = db.insert(DBConstants.USER_TABLE_PROFILE, null, values);
+        db.close();
+        if (result > 0) {
+            Log.d("DataBaseHandler", "User's profile saved successfully! " + result);
+        }
+        return result > 0l;
+    }
+
+    public boolean updateUserProfile(UserProfileModel userProfileModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DBConstants.COL_FULL_NAME, userProfileModel.getFullName());
+        values.put(DBConstants.COL_PHONE, userProfileModel.getPhone());
+        values.put(DBConstants.COL_EMAIL, userProfileModel.getEmail());
+        if (userProfileModel.getImageData() != null) {
+            String base64Image = Base64.encodeToString(userProfileModel.getImageData(), Base64.DEFAULT);
+            values.put(DBConstants.COL_IMAGE, base64Image);
+        }
+        int update = db.update(DBConstants.USER_TABLE_PROFILE, values, DBConstants.COL_USERID + "=?", new String[]{String.valueOf(userProfileModel.getUserId())});
+        return update > 0;
+    }
+
+    public boolean checkUserExistence(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "Select * from " + DBConstants.USER_TABLE_PROFILE + " where " + DBConstants.COL_EMAIL + "=? ";
+        Cursor cursor = db.rawQuery(query, new String[]{email});
+        boolean userExists = cursor.getCount() > 0;
+        cursor.close();
+        db.close();
+        return userExists;
+    }
+    // Inside the DataBaseHandler class
+
+    public UserProfileModel getUserData(int userId) {
+        UserProfileModel userProfileModel = null;
+        try {
+            String query = "Select * from " + DBConstants.USER_TABLE_PROFILE + " where " + DBConstants.COL_USERID + "=?";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(userId)});
+            if (cursor != null && cursor.moveToFirst()) {
+                userProfileModel = new UserProfileModel();
+                userProfileModel.setId(cursor.getInt(0));
+                userProfileModel.setFullName(cursor.getString(1));
+                userProfileModel.setPhone(cursor.getString(2));
+                userProfileModel.setEmail(cursor.getString(3));
+                userProfileModel.setImageData(cursor.getBlob(5));
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (SQLiteBlobTooBigException e) {
+            Log.e("TAG", "getAllContact: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return userProfileModel;
+    }
 }

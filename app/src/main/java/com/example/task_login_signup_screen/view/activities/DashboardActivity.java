@@ -1,6 +1,7 @@
 package com.example.task_login_signup_screen.view.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -9,8 +10,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -19,12 +25,18 @@ import android.widget.TextView;
 
 
 import com.example.task_login_signup_screen.R;
+import com.example.task_login_signup_screen.db.DataBaseHandler;
+import com.example.task_login_signup_screen.models.UserProfileModel;
 import com.example.task_login_signup_screen.utils.Constants;
+import com.example.task_login_signup_screen.utils.ImageUtils;
 import com.example.task_login_signup_screen.utils.Utils;
 import com.example.task_login_signup_screen.view.fragments.HomeFragment;
 import com.example.task_login_signup_screen.view.fragments.ProfileFragment;
 import com.example.task_login_signup_screen.view.fragments.SettingFragment;
+import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.material.navigation.NavigationView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DashboardActivity extends AppCompatActivity {
 
@@ -124,5 +136,16 @@ public class DashboardActivity extends AppCompatActivity {
         tvName.setText(name);
         TextView tvEmail = headerView.findViewById(R.id.tv_user_email);
         tvEmail.setText(email);
+        CircleImageView ivProfileImage = headerView.findViewById(R.id.civ_profile_image);
+
+        int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
+        UserProfileModel userProfileModel = DataBaseHandler.getInstance(this).getUserData(userId);
+        if (userProfileModel != null) {
+            byte[] imageData = userProfileModel.getImageData();
+            if (imageData != null && imageData.length > 0) {
+                Bitmap bitmap = ImageUtils.decodeBase64Image(imageData);
+                ivProfileImage.setImageBitmap(bitmap);
+            }
+        }
     }
 }
