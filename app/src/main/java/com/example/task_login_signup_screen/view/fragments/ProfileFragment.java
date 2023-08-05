@@ -67,8 +67,8 @@ public class ProfileFragment extends Fragment {
         etFullName = view.findViewById(R.id.et_full_name);
         etEmail = view.findViewById(R.id.et_email);
         etPhone = view.findViewById(R.id.et_phone);
-        profileImage=view.findViewById(R.id.civ_profile_image);
-        btnSave=view.findViewById(R.id.btn_save);
+        profileImage = view.findViewById(R.id.civ_profile_image);
+        btnSave = view.findViewById(R.id.btn_save);
         etPhone.setEnabled(false);
         etFullName.setEnabled(false);
         etEmail.setEnabled(false);
@@ -84,7 +84,7 @@ public class ProfileFragment extends Fragment {
         int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
         UserProfileModel userProfileModel = DataBaseHandler.getInstance(requireContext()).getUserData(userId);
         if (userProfileModel != null) {
-            Log.e("TAG", "UserProfileModel: "+userProfileModel.toString() );
+            Log.e("TAG", "UserProfileModel: " + userProfileModel.toString());
             // Load and set the user profile image
             byte[] imageData = userProfileModel.getImageData();
             if (imageData != null && imageData.length > 0) {
@@ -121,21 +121,21 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 int userId = sharedPreferences.getInt(Constants.PREF_USER_ID, -1);
                 UserProfileModel userProfileModel = new UserProfileModel();
-                    userProfileModel.setFullName(etFullName.getText().toString().trim());
-                    userProfileModel.setPhone(etPhone.getText().toString().trim());
-                    userProfileModel.setEmail(etEmail.getText().toString().trim());
-                    if (imageData != null && imageData.length > 0)
-                        userProfileModel.setImageData(imageData);
-                    userProfileModel.setUserId(userId);
-                    boolean result = DataBaseHandler.getInstance(requireContext()).updateUserProfile(userProfileModel);
-                    if (result) {
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString(Constants.PREF_NAME,etFullName.getText().toString().trim());
-                        editor.apply();
-                        Utils.navigateScreen(requireContext(), DashboardActivity.class);
-                    } else {
-                        Utils.showToastMessage(requireContext(), getString(R.string.something_went_wrong));
-                    }
+                userProfileModel.setFullName(etFullName.getText().toString().trim());
+                userProfileModel.setPhone(etPhone.getText().toString().trim());
+                userProfileModel.setEmail(etEmail.getText().toString().trim());
+                if (imageData != null && imageData.length > 0)
+                    userProfileModel.setImageData(imageData);
+                userProfileModel.setUserId(userId);
+                boolean result = DataBaseHandler.getInstance(requireContext()).updateUserProfile(userProfileModel);
+                if (result) {
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(Constants.PREF_NAME, etFullName.getText().toString().trim());
+                    editor.apply();
+                    Utils.navigateScreen(requireContext(), DashboardActivity.class);
+                } else {
+                    Utils.showToastMessage(requireContext(), getString(R.string.something_went_wrong));
+                }
             }
         });
     }
@@ -145,22 +145,23 @@ public class ProfileFragment extends Fragment {
             result -> {
                 Intent data = result.getData();
                 if (result.getResultCode() == Activity.RESULT_OK && data != null) {
-                    int resultCode=result.getResultCode();
-                        Uri imageUri = data.getData();
-                        profileImage.setImageURI(imageUri);
-                        try {
-                            imageData = ImageUtils.convertUriToBase64String(requireContext(), imageUri);
-                            imageData = ImageUtils.compressImage(imageData);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                            Utils.showToastMessage(requireContext(), "Unable to set image to your profile.");
-                        }
-                        // Rest of the code to handle the image URI
-                }else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
+                    int resultCode = result.getResultCode();
+                    Uri imageUri = data.getData();
+                    profileImage.setImageURI(imageUri);
+                    try {
+                        imageData = ImageUtils.convertUriToBase64String(requireContext(), imageUri);
+                        imageData = ImageUtils.compressImage(imageData);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Utils.showToastMessage(requireContext(), "Unable to set image to your profile.");
+                    }
+                    // Rest of the code to handle the image URI
+                } else if (result.getResultCode() == ImagePicker.RESULT_ERROR) {
                     Utils.showToastMessage(requireContext(), ImagePicker.getError(data));
                 }
             }
     );
+
     private void setUserDetails() {
         sharedPreferences = requireContext().getSharedPreferences(Constants.PREF_FILENAME, Context.MODE_PRIVATE);
         String email = sharedPreferences.getString(Constants.PREF_EMAIL, "");

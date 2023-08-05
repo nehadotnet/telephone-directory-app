@@ -5,9 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.AbstractWindowedCursor;
 import android.database.Cursor;
-import android.database.CursorWindow;
 import android.database.sqlite.SQLiteBlobTooBigException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -19,7 +17,6 @@ import androidx.annotation.Nullable;
 
 import com.example.task_login_signup_screen.models.ContactModel;
 import com.example.task_login_signup_screen.models.UserProfileModel;
-import com.example.task_login_signup_screen.network.responses.Data;
 import com.example.task_login_signup_screen.utils.Constants;
 
 import java.util.ArrayList;
@@ -44,23 +41,17 @@ public class DataBaseHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createContactTable = "CREATE TABLE " + DBConstants.TABLE_CONTACT + " (" + DBConstants.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DBConstants.COL_FULL_NAME + " VARCHAR, " + DBConstants.COL_PHONE + " VARCHAR, " + DBConstants.COL_EMAIL + " VARCHAR, " +
-                DBConstants.COL_NICKNAME + " VARCHAR, " + DBConstants.COL_ADDRESS + " VARCHAR, " + DBConstants.COL_WORK_INFO + " VARCHAR, " +
-                DBConstants.COL_RELATIONSHIP + " VARCHAR, " + DBConstants.COL_WEBSITE + " VARCHAR, " + DBConstants.COL_USERID + " INTEGER ," +
-                DBConstants.COL_IMAGE + " BLOB)";
-        db.execSQL(createContactTable);
-
-        String createUserProfileTable = "CREATE TABLE " + DBConstants.USER_TABLE_PROFILE + " (" + DBConstants.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                DBConstants.COL_FULL_NAME + " VARCHAR, " + DBConstants.COL_PHONE + " VARCHAR, " + DBConstants.COL_EMAIL + " VARCHAR, " +
-                DBConstants.COL_USERID + " INTEGER," + DBConstants.COL_IMAGE + " BLOB)";
-        Log.e("TAG", "onCreate: " + createUserProfileTable);
-        db.execSQL(createUserProfileTable);
+        db.execSQL(DbQueries.createContactTable);
+        db.execSQL(DbQueries.createUserProfileTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if(oldVersion<2) {
+            db.execSQL(DbQueries.createUserProfileTable);
+        } else if (oldVersion < 3){
+            // for future versions
+        }
     }
 
     // this method is use to add new course to our sqlite database.
