@@ -13,3 +13,9 @@ This project is implemented using JAVA Language. (Android - Flamingo)
 ## Project Details
 - Started on : 11 ‎June ‎2023, ‏‎20:26:35
 - Completion on : On Going
+
+
+### Images 
+![Screenshot](./app/snapshots/login_screen.png)
+
+![](./app/snapshots/login_screen.png =100x20)
