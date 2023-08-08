@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -96,6 +97,9 @@ public class DashboardActivity extends AppCompatActivity {
                         getSupportActionBar().setTitle(title);
                     }
                 }
+                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                    drawerLayout.closeDrawer(GravityCompat.START, false);
+                }
                 return false;
             }
         });
@@ -120,7 +124,7 @@ public class DashboardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.close();
+            drawerLayout.closeDrawer(GravityCompat.START, false);
         } else {
             super.onBackPressed();
         }

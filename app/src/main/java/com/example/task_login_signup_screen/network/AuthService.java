@@ -9,7 +9,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface AuthService { //
+public interface AuthService {
 
     @POST("api/authaccount/registration")
     Call<RegisterResponse> register(@Body SignUpRequest request);
