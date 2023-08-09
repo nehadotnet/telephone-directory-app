@@ -16,7 +16,6 @@ This project is implemented using JAVA Language. (Android - Flamingo)
 
 
 ### Images 
-<img src="./app/snapshots/login_screen.png" width="200" height="400"/> <img src="./app/snapshots/signup_screen.png" width="200" height="400"/> <img src="./app/snapshots/add_new_contact_screen.png" width="200" height="400"/>
-<img src="./app/snapshots/home_screen.png" width="200" height="400"/> <img src="./app/snapshots/delete_contact.png" width="200" height="400"/> <img src="./app/snapshots/edit_contact_screen.png" width="200" height="400"/>
-<img src="./app/snapshots/profile_screen.png" width="200" height="400"/> <img src="./app/snapshots/update_profile.png" width="200" height="400"/> <img src="./app/snapshots/splash_screen.png" width="200" height="400"/>
-<img src="./app/snapshots/logout_dialog_screen.png" width="200" height="400"/> <img src="./app/snapshots/select_image_screen.png" width="200" height="400"/> 
+<img src="./app/snapshots/splash_screen.png" width="200" height="400"/> <img src="./app/snapshots/login_screen.png" width="200" height="400"/> <img src="./app/snapshots/signup_screen.png" width="200" height="400"/> 
+<img src="./app/snapshots/home_screen.png" width="200" height="400"/> <img src="./app/snapshots/drawer_layout.png" width="200" height="400"/> <img src="./app/snapshots/profile_screen.png" width="200" height="400"/>
+<img src="./app/snapshots/logout_dialog_screen.png" width="200" height="400"/> <img src="./app/snapshots/delete_screen.png" width="200" height="400"/> 
